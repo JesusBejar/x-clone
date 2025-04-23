@@ -1,10 +1,9 @@
 "use client"
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { createClientComponentClient, Session } from "@supabase/auth-helpers-nextjs"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 
-export default function AuthButton() {  
+export default function AuthButtonClient({ session }: {session: Session | null}) {  
     const supabase = createClientComponentClient()
     const router = useRouter()
 
@@ -21,16 +20,6 @@ export default function AuthButton() {
         await supabase.auth.signOut()
         router.refresh()
     }
-
-    const [ session, setSession ] = useState()
-
-    useEffect(() => {
-        const getSession = async () => {
-            const { data } = await supabase.auth.getSession()
-            setSession(data.session)
-        } 
-        getSession()
-    }, [])
 
 
     // used terniary operators to make btns aware of user session
